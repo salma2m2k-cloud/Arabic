@@ -1,0 +1,1635 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>ديوان — مذاكرة الأدب العربي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0F1726;
+  --bg-2:#141F33;
+  --panel:#182642;
+  --line:rgba(201,162,75,.22);
+  --gold:#CBA24C;
+  --gold-soft:#E4C877;
+  --emerald:#2E6F5E;
+  --emerald-soft:#4C9484;
+  --wine:#9A4A3E;
+  --wine-soft:#C97767;
+  --cream:#F6ECD8;
+  --cream-2:#EEDFC0;
+  --ink:#241C12;
+  --ink-soft:#5A4E3B;
+  --text-hi:#F4EEDF;
+  --text-mid:#C7BFA9;
+  --text-dim:#8B93A8;
+  --radius-lg:22px;
+  --radius-md:14px;
+  --radius-sm:9px;
+  --shadow-deep:0 18px 40px -14px rgba(0,0,0,.55);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:
+    radial-gradient(1200px 700px at 85% -10%, #1B2C4A 0%, transparent 60%),
+    radial-gradient(900px 600px at -10% 110%, #17233B 0%, transparent 55%),
+    var(--bg);
+  color:var(--text-hi);
+  font-family:'Tajawal',sans-serif;
+  min-height:100vh;
+  line-height:1.7;
+}
+::selection{background:var(--gold);color:var(--ink);}
+h1,h2,h3,h4{margin:0;font-weight:800;}
+p{margin:0;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+input{font-family:inherit;}
+.verse{font-family:'Amiri',serif;}
+a{color:inherit;}
+
+/* ===== layout ===== */
+#app{display:flex;min-height:100vh;}
+#sidebar{
+  width:296px;flex:0 0 296px;
+  background:linear-gradient(180deg,var(--bg-2),#101a2c);
+  border-inline-start:1px solid var(--line);
+  padding:26px 20px 30px;
+  position:sticky;top:0;height:100vh;overflow-y:auto;
+  display:flex;flex-direction:column;gap:22px;
+  z-index:40;
+}
+#sidebar::-webkit-scrollbar{width:6px;}
+#sidebar::-webkit-scrollbar-thumb{background:var(--line);border-radius:10px;}
+.brand{display:flex;align-items:center;gap:12px;}
+.brand-mark{
+  width:44px;height:44px;border-radius:12px;
+  background:linear-gradient(135deg,var(--gold),#8E6E2A);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Amiri',serif;font-weight:700;font-size:22px;color:#241a06;
+  box-shadow:0 6px 16px -6px rgba(203,162,76,.6);
+  flex:0 0 auto;
+}
+.brand-text h1{font-size:19px;color:var(--text-hi);}
+.brand-text p{font-size:11.5px;color:var(--text-dim);margin-top:2px;}
+
+.stat-row{display:flex;gap:10px;}
+.stat-chip{
+  flex:1;background:var(--panel);border:1px solid var(--line);
+  border-radius:var(--radius-sm);padding:10px 8px;text-align:center;
+}
+.stat-chip .n{font-size:16px;font-weight:800;color:var(--gold-soft);}
+.stat-chip .l{font-size:10.5px;color:var(--text-dim);margin-top:2px;}
+
+.nav-label{font-size:11.5px;color:var(--text-dim);letter-spacing:.02em;padding:0 4px;}
+.lesson-list{display:flex;flex-direction:column;gap:9px;}
+.lesson-item{
+  display:flex;align-items:center;gap:11px;
+  padding:11px 12px;border-radius:var(--radius-md);
+  background:var(--panel);border:1px solid transparent;
+  transition:border-color .18s,background .18s;
+}
+.lesson-item:hover{border-color:var(--line);}
+.lesson-item.active{border-color:var(--gold);background:#1E2C4C;}
+.lesson-icon{
+  width:34px;height:34px;border-radius:9px;flex:0 0 auto;
+  display:flex;align-items:center;justify-content:center;font-size:17px;
+  background:linear-gradient(135deg,var(--emerald),#1E4A3F);
+}
+.lesson-item .li-text{flex:1;min-width:0;}
+.lesson-item .li-text .t{font-size:13.5px;font-weight:700;color:var(--text-hi);}
+.lesson-item .li-text .sub{font-size:10.5px;color:var(--text-dim);margin-top:1px;}
+.lesson-progress-track{height:4px;border-radius:3px;background:#0D1524;margin-top:7px;overflow:hidden;}
+.lesson-progress-fill{height:100%;background:linear-gradient(90deg,var(--emerald-soft),var(--gold));border-radius:3px;transition:width .5s ease;}
+
+.section-toc{display:none;}
+.section-toc.show{display:flex;flex-direction:column;gap:4px;margin-top:2px;}
+.toc-btn{
+  text-align:right;font-size:12px;color:var(--text-mid);
+  padding:7px 10px;border-radius:8px;display:flex;align-items:center;gap:8px;
+}
+.toc-btn:hover{background:var(--panel);}
+.toc-btn.seen .dot{background:var(--gold);}
+.toc-btn .dot{width:6px;height:6px;border-radius:50%;background:var(--line);flex:0 0 auto;}
+
+#main{flex:1;min-width:0;padding:34px clamp(18px,4vw,54px) 90px;max-width:1180px;margin:0 auto;width:100%;}
+
+/* ===== home ===== */
+.home-hero{
+  border-radius:var(--radius-lg);
+  background:linear-gradient(135deg,#1E2C4C 0%,#16233D 60%,#101A2C 100%);
+  border:1px solid var(--line);
+  padding:clamp(28px,4vw,52px);position:relative;overflow:hidden;
+  margin-bottom:34px;
+}
+.home-hero::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(500px 260px at 88% 10%,rgba(203,162,76,.16),transparent 70%);
+  pointer-events:none;
+}
+.eyebrow-free{color:var(--gold-soft);font-size:13px;font-weight:700;}
+.home-hero h2{font-size:clamp(24px,3.4vw,34px);color:var(--text-hi);margin-top:10px;max-width:640px;}
+.home-hero .desc{color:var(--text-mid);font-size:14.5px;margin-top:12px;max-width:560px;}
+.hero-cta{
+  margin-top:22px;display:inline-flex;align-items:center;gap:10px;
+  background:linear-gradient(135deg,var(--gold),#AD8536);
+  color:#241a06;font-weight:800;font-size:14.5px;
+  padding:13px 22px;border-radius:12px;
+  box-shadow:0 12px 26px -10px rgba(203,162,76,.55);
+}
+.lesson-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;}
+.lesson-card{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-lg);
+  padding:20px;display:flex;flex-direction:column;gap:12px;
+  transition:transform .18s,border-color .18s;
+}
+.lesson-card:hover{transform:translateY(-3px);border-color:var(--gold);}
+.lesson-card .ic{font-size:26px;}
+.lesson-card h3{font-size:16.5px;}
+.lesson-card p{font-size:12.5px;color:var(--text-mid);}
+.lesson-card .go{margin-top:auto;color:var(--gold-soft);font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px;}
+
+/* ===== section chrome ===== */
+.lesson-header{margin-bottom:30px;}
+.lesson-header .kicker{color:var(--emerald-soft);font-size:12.5px;font-weight:700;}
+.lesson-header h2{font-size:clamp(24px,3.2vw,32px);margin-top:8px;}
+.lesson-header .sub{color:var(--text-mid);font-size:14px;margin-top:10px;max-width:680px;}
+.top-progress{margin-top:20px;height:6px;background:#0D1524;border-radius:4px;overflow:hidden;border:1px solid var(--line);}
+.top-progress-fill{height:100%;background:linear-gradient(90deg,var(--emerald-soft),var(--gold));width:0%;transition:width .6s ease;}
+
+.section{
+  scroll-margin-top:24px;
+  padding:40px 0;border-top:1px solid var(--line);
+}
+.section:first-of-type{border-top:none;padding-top:10px;}
+.section-head{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.section-num{
+  width:38px;height:38px;border-radius:11px;flex:0 0 auto;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--panel);border:1px solid var(--line);color:var(--gold-soft);
+  font-weight:800;font-size:14px;
+}
+.section-head h3{font-size:19px;}
+.section-head .shint{font-size:12px;color:var(--text-dim);margin-top:2px;}
+
+.prose{color:var(--text-mid);font-size:14.5px;max-width:760px;}
+.prose + .prose{margin-top:10px;}
+
+/* ===== cards / grids ===== */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-md);padding:18px;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+@media(max-width:860px){.grid-2,.grid-3{grid-template-columns:1fr;}}
+
+.reason-list{display:flex;flex-direction:column;gap:10px;}
+.reason-item{
+  display:flex;gap:12px;background:var(--panel);border:1px solid var(--line);
+  border-radius:var(--radius-md);padding:14px 16px;align-items:flex-start;
+}
+.reason-item.best{border-color:var(--gold);background:linear-gradient(90deg,#241C0F,#182642);}
+.reason-num{
+  width:26px;height:26px;border-radius:50%;background:#0D1524;border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--text-dim);flex:0 0 auto;
+}
+.reason-item.best .reason-num{background:var(--gold);color:#241a06;border-color:var(--gold);}
+.reason-item p{font-size:13.5px;color:var(--text-mid);}
+.reason-item.best p{color:var(--text-hi);}
+.best-tag{display:inline-block;margin-top:6px;font-size:11px;color:var(--gold-soft);font-weight:800;}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{
+  background:var(--panel);border:1px solid var(--line);border-radius:20px;
+  padding:8px 14px;font-size:12.5px;color:var(--text-mid);
+}
+
+.poets-strip{display:flex;flex-wrap:wrap;gap:10px;}
+.poet-pill{
+  background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:10px 14px;font-size:13px;display:flex;align-items:center;gap:8px;
+}
+.poet-pill .idx{color:var(--gold-soft);font-weight:800;font-size:11px;}
+.alt-note{margin-top:14px;font-size:12.5px;color:var(--text-dim);}
+
+/* ===== poet cards ===== */
+.poet-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;}
+.poet-card{
+  background:linear-gradient(160deg,#1B2A48,#13203A);
+  border:1px solid var(--line);border-radius:var(--radius-lg);
+  padding:20px;cursor:pointer;position:relative;overflow:hidden;
+  transition:transform .18s,border-color .18s;
+}
+.poet-card:hover{transform:translateY(-4px);border-color:var(--gold);}
+.poet-card .pc-badge{
+  display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:800;color:var(--gold-soft);
+  background:rgba(203,162,76,.1);border:1px solid var(--line);border-radius:20px;padding:5px 11px;
+}
+.poet-card h4{margin-top:14px;font-size:18px;}
+.poet-card .pc-order{position:absolute;left:16px;top:16px;font-family:'Amiri',serif;font-size:34px;color:rgba(255,255,255,.06);font-weight:700;}
+.poet-card .pc-hint{margin-top:12px;font-size:12px;color:var(--text-dim);display:flex;align-items:center;gap:6px;}
+.warn-tag{
+  display:inline-flex;align-items:center;gap:5px;margin-top:8px;font-size:10.5px;color:var(--wine-soft);
+  background:rgba(154,74,62,.14);border:1px solid rgba(154,74,62,.35);border-radius:8px;padding:4px 8px;
+}
+
+/* ===== modal ===== */
+#modal-layer{position:fixed;inset:0;z-index:200;display:none;}
+#modal-layer.open{display:block;}
+.modal-bg{position:absolute;inset:0;background:rgba(6,10,18,.72);backdrop-filter:blur(3px);}
+.modal-box{
+  position:relative;max-width:640px;width:calc(100% - 32px);
+  margin:5vh auto;max-height:90vh;overflow-y:auto;
+  background:linear-gradient(170deg,#1C2C4C,#121C31);
+  border:1px solid var(--gold);border-radius:var(--radius-lg);
+  padding:clamp(20px,4vw,34px);box-shadow:var(--shadow-deep);
+  animation:modalIn .25s ease;
+}
+@keyframes modalIn{from{opacity:0;transform:translateY(14px) scale(.98);}to{opacity:1;transform:none;}}
+.modal-close{position:absolute;left:16px;top:16px;width:32px;height:32px;border-radius:50%;background:var(--panel);border:1px solid var(--line);font-size:16px;color:var(--text-mid);}
+.modal-close:hover{color:var(--gold);}
+.mh-badge{color:var(--gold-soft);font-size:12.5px;font-weight:800;}
+.modal-box h3{font-size:23px;margin-top:8px;}
+.mh-order{color:var(--text-dim);font-size:12px;margin-top:4px;}
+.mblock{margin-top:20px;}
+.mblock h5{font-size:13px;color:var(--emerald-soft);margin-bottom:9px;}
+.fact-list{display:flex;flex-direction:column;gap:7px;}
+.fact-list li{list-style:none;font-size:13.5px;color:var(--text-mid);padding-inline-start:16px;position:relative;}
+.fact-list li::before{content:'—';position:absolute;right:0;color:var(--gold-soft);}
+.matlaa-card{
+  background:linear-gradient(135deg,#241C0F,#2A2011);
+  border:1px solid var(--gold);border-radius:var(--radius-md);
+  padding:18px 20px;margin-top:8px;text-align:center;
+}
+.matlaa-card .v1,.matlaa-card .v2{font-family:'Amiri',serif;font-size:19px;color:var(--cream);line-height:2;}
+.matlaa-card .tag{margin-top:10px;font-size:11px;color:var(--gold-soft);}
+
+/* ===== memorize flip cards ===== */
+.flip-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px;}
+.flip-card{perspective:1100px;height:150px;}
+.flip-inner{
+  position:relative;width:100%;height:100%;transition:transform .55s cubic-bezier(.4,.2,.2,1);
+  transform-style:preserve-3d;cursor:pointer;
+}
+.flip-card.flipped .flip-inner{transform:rotateY(180deg);}
+.flip-face{
+  position:absolute;inset:0;backface-visibility:hidden;border-radius:var(--radius-md);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:14px;
+  border:1px solid var(--line);
+}
+.flip-front{background:linear-gradient(150deg,var(--panel),#101A2C);}
+.flip-front .icon{font-size:22px;margin-bottom:8px;}
+.flip-front .q{font-size:14px;font-weight:800;color:var(--text-hi);}
+.flip-front .tap{margin-top:10px;font-size:10.5px;color:var(--text-dim);}
+.flip-back{background:linear-gradient(150deg,#241C0F,#1B2C4A);transform:rotateY(180deg);}
+.flip-back .ans{font-size:15.5px;font-weight:800;color:var(--gold-soft);}
+.flip-back .why{margin-top:8px;font-size:11.5px;color:var(--text-mid);}
+
+/* ===== matlaa cards grid ===== */
+.matlaa-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
+.matlaa-tile{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-lg);padding:18px;text-align:center;}
+.matlaa-tile .poet-name{font-size:12.5px;color:var(--emerald-soft);font-weight:800;}
+.matlaa-tile .verse{font-size:16.5px;color:var(--cream);margin-top:10px;line-height:2;}
+
+/* ===== comparison ===== */
+.confuse-row{
+  display:flex;align-items:center;gap:14px;background:var(--panel);border:1px solid var(--line);
+  border-radius:var(--radius-md);padding:13px 16px;
+}
+.confuse-row + .confuse-row{margin-top:10px;}
+.confuse-row .fact{flex:1;font-size:13.5px;color:var(--text-mid);}
+.confuse-row .arrow{color:var(--gold-soft);font-size:14px;}
+.confuse-row .who{font-weight:800;font-size:13.5px;color:var(--text-hi);background:#0D1524;padding:6px 12px;border-radius:9px;border:1px solid var(--line);white-space:nowrap;}
+
+/* ===== mind map ===== */
+.mindmap-wrap{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-lg);padding:24px;overflow:hidden;}
+.mindmap-center{
+  position:absolute;top:50%;right:50%;transform:translate(50%,-50%);
+  background:linear-gradient(135deg,var(--gold),#8E6E2A);color:#241a06;
+  border-radius:16px;padding:14px 18px;text-align:center;font-weight:800;font-size:13px;
+  box-shadow:0 10px 24px -8px rgba(203,162,76,.6);z-index:5;width:120px;
+}
+#mindmap-svg{position:absolute;inset:0;width:100%;height:100%;}
+.mm-node{
+  position:absolute;background:#101A2C;border:1px solid var(--line);border-radius:12px;
+  padding:9px 11px;width:132px;text-align:center;cursor:pointer;z-index:4;transition:border-color .15s,transform .15s;
+}
+.mm-node:hover{border-color:var(--gold);transform:scale(1.04);}
+.mm-node .nm{font-size:12px;font-weight:800;color:var(--text-hi);}
+.mm-node .ep{font-size:10px;color:var(--gold-soft);margin-top:3px;}
+.mm-node .tp{font-size:9.5px;color:var(--text-dim);margin-top:3px;}
+.mindmap-canvas{position:relative;height:560px;}
+@media(max-width:760px){.mindmap-canvas{height:1500px;}.mm-node{position:static;width:100%;margin-bottom:10px;}.mindmap-center{position:static;transform:none;width:auto;margin-bottom:16px;}#mindmap-svg{display:none;}}
+
+/* ===== buttons ===== */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:11px;
+  font-weight:800;font-size:13.5px;transition:transform .15s,box-shadow .15s;
+}
+.btn-gold{background:linear-gradient(135deg,var(--gold),#AD8536);color:#241a06;box-shadow:0 10px 22px -10px rgba(203,162,76,.55);}
+.btn-gold:hover{transform:translateY(-2px);}
+.btn-ghost{background:var(--panel);border:1px solid var(--line);color:var(--text-hi);}
+.btn-ghost:hover{border-color:var(--gold);}
+.btn-ghost.active{border-color:var(--gold);color:var(--gold-soft);}
+.btn-row{display:flex;flex-wrap:wrap;gap:10px;}
+
+/* ===== challenge / quiz shared ===== */
+.q-shell{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-lg);padding:clamp(18px,3vw,28px);}
+.q-progress{display:flex;align-items:center;gap:10px;margin-bottom:18px;}
+.q-progress .track{flex:1;height:6px;background:#0D1524;border-radius:4px;overflow:hidden;}
+.q-progress .fill{height:100%;background:linear-gradient(90deg,var(--emerald-soft),var(--gold));transition:width .4s;}
+.q-progress .count{font-size:12px;color:var(--text-dim);white-space:nowrap;}
+.q-prompt{font-size:16px;font-weight:700;color:var(--text-hi);margin-bottom:16px;}
+.q-verse{font-family:'Amiri',serif;font-size:19px;color:var(--gold-soft);text-align:center;margin:14px 0;line-height:1.9;}
+.q-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:560px){.q-options{grid-template-columns:1fr;}}
+.q-opt{
+  background:#101A2C;border:1px solid var(--line);border-radius:11px;padding:13px 16px;
+  font-size:13.5px;color:var(--text-mid);text-align:right;transition:border-color .15s,background .15s;
+}
+.q-opt:hover{border-color:var(--gold);}
+.q-opt.correct{border-color:var(--emerald-soft);background:rgba(76,148,132,.15);color:var(--text-hi);}
+.q-opt.wrong{border-color:var(--wine-soft);background:rgba(154,74,62,.15);color:var(--text-hi);}
+.q-opt[disabled]{pointer-events:none;}
+.q-feedback{margin-top:16px;padding:13px 16px;border-radius:11px;font-size:13px;display:none;}
+.q-feedback.show{display:block;}
+.q-feedback.ok{background:rgba(76,148,132,.14);border:1px solid var(--emerald-soft);color:var(--cream);}
+.q-feedback.bad{background:rgba(154,74,62,.14);border:1px solid var(--wine-soft);color:var(--cream);}
+.q-fill-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:16px 0;}
+.q-fill-row input{
+  background:#0D1524;border:1px solid var(--line);border-radius:9px;color:var(--text-hi);
+  padding:10px 14px;font-size:15px;font-family:'Amiri',serif;text-align:center;width:150px;
+}
+.q-fill-row input:focus{outline:none;border-color:var(--gold);}
+.q-order-pool{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0;min-height:46px;padding:10px;border:1px dashed var(--line);border-radius:11px;}
+.q-order-slot{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0;min-height:46px;}
+.q-word{
+  background:#101A2C;border:1px solid var(--line);border-radius:9px;padding:9px 14px;
+  font-family:'Amiri',serif;font-size:15px;color:var(--text-hi);
+}
+.q-word.picked{border-color:var(--gold);color:var(--gold-soft);}
+.q-result{text-align:center;padding:30px 10px;}
+.q-result .score{font-size:40px;font-weight:900;color:var(--gold-soft);}
+.q-result p{color:var(--text-mid);font-size:13.5px;margin-top:8px;}
+
+.level-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;}
+.level-tab{
+  background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:9px 15px;
+  font-size:12.5px;font-weight:700;color:var(--text-mid);display:flex;align-items:center;gap:6px;
+}
+.level-tab.active{border-color:var(--gold);color:var(--gold-soft);background:#1E2C4C;}
+.level-tab .done{color:var(--emerald-soft);}
+
+/* ===== error bank ===== */
+.mistake-item{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-md);padding:14px 16px;display:flex;align-items:center;gap:14px;}
+.mistake-item + .mistake-item{margin-top:10px;}
+.mistake-item .mi-main{flex:1;}
+.mistake-item .q{font-size:13.5px;color:var(--text-hi);}
+.mistake-item .a{font-size:12px;color:var(--emerald-soft);margin-top:4px;}
+.mistake-item .times{font-size:11px;color:var(--wine-soft);background:rgba(154,74,62,.14);border-radius:8px;padding:4px 9px;white-space:nowrap;}
+.empty-note{color:var(--text-dim);font-size:13px;text-align:center;padding:26px 10px;}
+
+/* ===== summary ===== */
+.summary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;}
+.summary-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-md);padding:14px;}
+.summary-card .nm{font-size:13.5px;font-weight:800;color:var(--text-hi);}
+.summary-card .ep{font-size:11.5px;color:var(--gold-soft);margin-top:4px;}
+.summary-card .vs{font-family:'Amiri',serif;font-size:12.5px;color:var(--text-mid);margin-top:8px;line-height:1.8;}
+.summary-card .tp{font-size:10.5px;color:var(--text-dim);margin-top:8px;}
+.finish-banner{
+  text-align:center;padding:34px 20px;border-radius:var(--radius-lg);
+  background:linear-gradient(135deg,#241C0F,#182642);border:1px solid var(--gold);margin-top:20px;
+}
+.finish-banner .big{font-size:20px;font-weight:800;color:var(--gold-soft);}
+.finish-banner p{color:var(--text-mid);font-size:13px;margin-top:8px;}
+
+.toast{
+  position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(120%);
+  background:linear-gradient(135deg,var(--gold),#AD8536);color:#241a06;font-weight:800;font-size:13px;
+  padding:12px 22px;border-radius:12px;box-shadow:var(--shadow-deep);z-index:400;transition:transform .3s ease;
+}
+.toast.show{transform:translateX(-50%) translateY(0);}
+
+.mobile-topbar{display:none;position:sticky;top:0;z-index:60;background:var(--bg-2);border-bottom:1px solid var(--line);padding:12px 16px;align-items:center;justify-content:space-between;}
+.mobile-topbar button{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:8px 12px;font-size:12px;color:var(--text-hi);}
+@media(max-width:900px){
+  #sidebar{position:fixed;right:0;top:0;bottom:0;transform:translateX(100%);transition:transform .25s ease;box-shadow:var(--shadow-deep);}
+  #sidebar.open{transform:translateX(0);}
+  .mobile-topbar{display:flex;}
+  #main{padding:20px 16px 70px;}
+  .q-options{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<div class="mobile-topbar">
+  <div class="brand" style="gap:9px;">
+    <div class="brand-mark" style="width:34px;height:34px;font-size:17px;">د</div>
+    <strong style="font-size:14px;">ديوان</strong>
+  </div>
+  <button id="menu-toggle">القائمة ☰</button>
+</div>
+<div id="app">
+  <aside id="sidebar"></aside>
+  <main id="main"></main>
+</div>
+<div id="modal-layer"><div class="modal-bg" id="modal-bg"></div><div class="modal-box" id="modal-box"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================================
+   ديوان — نظام مذاكرة الأدب العربي التفاعلي
+   بنية قابلة للتوسّع: أضف أي درس جديد داخل LESSONS بدون لمس بقية الملف.
+   ========================================================================= */
+
+/* ---------------------------- التخزين المحلي ---------------------------- */
+const STORE_KEY = 'diwan_progress_v1';
+const ERR_KEY   = 'diwan_errorbank_v1';
+
+function loadStore(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  return { lessons:{}, xp:0, streak:{count:0,last:null}, badges:[] };
+}
+function saveStore(s){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(s)); }catch(e){} }
+function loadErrors(){
+  try{ const raw = localStorage.getItem(ERR_KEY); if(raw) return JSON.parse(raw); }catch(e){}
+  return [];
+}
+function saveErrors(e){ try{ localStorage.setItem(ERR_KEY, JSON.stringify(e)); }catch(e){} }
+
+let STORE = loadStore();
+let ERRORS = loadErrors();
+
+function ensureLesson(id){
+  if(!STORE.lessons[id]) STORE.lessons[id] = { sectionsSeen:[], quizBest:0, quizRuns:0, matlaaLevels:[], startedAt:Date.now() };
+  return STORE.lessons[id];
+}
+function addXP(n){
+  STORE.xp = (STORE.xp||0) + n;
+  saveStore(STORE);
+  renderSidebar();
+  showToast('+' + n + ' نقطة خبرة ⭐');
+}
+function touchStreak(){
+  const today = new Date().toISOString().slice(0,10);
+  const st = STORE.streak || {count:0,last:null};
+  if(st.last === today){ /* already counted today */ }
+  else{
+    const y = new Date(Date.now()-86400000).toISOString().slice(0,10);
+    st.count = (st.last === y) ? (st.count+1) : 1;
+    st.last = today;
+  }
+  STORE.streak = st;
+  saveStore(STORE);
+}
+function recordMistake(lessonId, category, question, correctAnswer){
+  const existing = ERRORS.find(x=>x.lessonId===lessonId && x.category===category && x.question===question);
+  if(existing){ existing.count = (existing.count||1)+1; existing.time = Date.now(); }
+  else ERRORS.push({ id: lessonId+'_'+category+'_'+Math.random().toString(36).slice(2,8), lessonId, category, question, correctAnswer, count:1, time:Date.now() });
+  saveErrors(ERRORS);
+}
+function clearMistake(entryId){
+  ERRORS = ERRORS.filter(x=>x.id!==entryId);
+  saveErrors(ERRORS);
+}
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast._h);
+  showToast._h = setTimeout(()=>t.classList.remove('show'), 2200);
+}
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* ============================== بيانات الشعراء ============================== */
+const POETS = [
+{
+  id:'imru_alqais', order:1, name:'امرؤ القيس', epithet:'الملك الضليل',
+  titleUncertain:{ text:'أمير شعراء العصر الجاهلي', note:'وردت هذه اللفظة في المصدر مقرونة بعلامة استفهام، أي أنها غير مؤكدة تمامًا — احتفظنا بها كما وردت.' },
+  icon:'👑',
+  intro:'أول من قال معلقة من شعراء العرب، وأول شعر عَلِق بنفوس الناس.',
+  facts:[
+    'أول واحد يقول معلقة من الأساس.',
+    'أجاد القول في استيقاف الصحب، والتحدث بصيغة المثنى.',
+    'أجاد بكاء الديار، وتشبيه النساء بالظباء والمها.',
+    'كان بارعًا في وصف الخيل.',
+    'كان بارعًا في ترقيق النسيب (الغزل).'
+  ],
+  style:['جودة الاستعارات','تنويع التشبيه','يغلب على شعره التشبيب (الغزل) والوصف'],
+  standing:'أول شعر عَلِق بنفوس الناس — بدأت به ريادة فن المعلقات.',
+  matlaa:{ line1:'قفا نبك من ذكرى حبيب ومنزل', line2:'بسقط اللوى بين الدخول فحومل', blankWord1:'حبيب', blankWord2:'اللوى' },
+  topics:['البكاء على الأطلال','وصف المحبوبة','وصف المها والفرس','وصف الليل والصيد والطبيعة'],
+  memorize:{ q:'الملك الضليل', why:'لقبه المشهور — أشهر ألقاب شعراء المعلقات على الإطلاق، وهو أول من قال معلقة.' }
+},
+{
+  id:'tarafa', order:2, name:'طرفة بن العبد', epithet:'الغلام القتيل',
+  icon:'🕯️',
+  intro:'أقصر الشعراء الجاهليين عمرًا، وأول من رثى نفسه في الشعر العربي.',
+  facts:[
+    'لُقّب بالغلام القتيل أو ابن العشرين.',
+    'قُتل غدرًا ولم يتجاوز 26 سنة، وذلك لهجائه عمرو بن هند.',
+    'نشأ يتيمًا، وظهرت نباهته مبكرًا.',
+    'أقصر الشعراء الجاهليين عمرًا رغم أنه بلغ من الشعر ما لم يبلغه كثيرون.',
+    'العرب تقول عنه: أشعر الناس ابن العشرين.'
+  ],
+  standing:'معلقته تُعدّ أفضل المعلقات.',
+  style:['أكثرها غريبًا','أغزرها معنى','أدقها وصفًا','أرصنها لفظًا وعبارة'],
+  matlaa:{ line1:'لخولة أطلال ببرقة ثهمد', line2:'تلوح كباقي الوشم في ظاهر اليد', blankWord1:'ثهمد', blankWord2:'الوشم' },
+  topics:['البكاء على الأطلال','الترحال','الحديث عن المعاهد وذكرياتها','وصف الحبيبة والناقة','الفخر الشخصي','الحكمة','الشكوى','الرثاء النفسي (أول من رثى نفسه)'],
+  memorize:{ q:'أول من رثى نفسه', why:'معلومة مختلفة عن لقبه — طرفة بن العبد هو أول شاعر عربي رثى نفسه في شعره.' }
+},
+{
+  id:'zuhair', order:3, name:'زهير بن أبي سلمى', epithet:'شاعر السلام',
+  icon:'🕊️',
+  intro:'نشأ في بيت مليء بالشعراء، ولُقّب بشاعر السلام لذمّه الحرب ومدحه للساعين في الإصلاح.',
+  facts:[
+    'من قبيلة مزينة، وهي فرع من مُضر.',
+    'نشأ في بيئة كلها شعراء: أبوه شاعر، وأختاه شاعرتان.',
+    'أوس بن حجر، زوج أمه، شاعر أيضًا.',
+    'في نسله شعراء: ابناه كعب وبُجير.',
+    'خاله بشامة بن الغدير شاعر وأحد الأشراف، وعنه أخذ زهير الحكمة والأدب.',
+    'توفي قبل البعثة النبوية.'
+  ],
+  hawliyyat:{
+    title:'حوليات زهير',
+    desc:'سُمّيت معلقاته بالحوليات لأنها كانت تُقعَّد حول عام كامل:',
+    steps:[
+      { t:'ينظم القصيدة', d:'في 4 أشهر' },
+      { t:'يهذّبها', d:'في 4 أشهر' },
+      { t:'يعرضها على خواصّه', d:'في 4 أشهر' }
+    ]
+  },
+  omarOpinion:{
+    title:'رأي عمر بن الخطاب',
+    desc:'فضّل عمر بن الخطاب زهيرًا على غيره من الشعراء، وقال إنه:',
+    points:['لا يتبع حوشي الكلام.','لا يعاظل في المنطق.','لا يقول إلا ما يعرف.','لا يمدح إلا بما هو فيه.']
+  },
+  matlaa:{ line1:'أمن أم أوفى دمنة لم تكلم', line2:'بحومانة الدراج فالمتثلم', blankWord1:'دمنة', blankWord2:'الدراج' },
+  topics:['بكاء على الأطلال','ذكر الترحال (مثل طرفة)','ذم الحرب','مدح هرم بن سنان والحارث بن عوف اللذين أصلحا بين عبس وذبيان','مدح قبيلة عبس لتماسكها','ختمها بالحكمة'],
+  memorize:{ q:'شاعر السلام', why:'لقبه — لأنه ذمّ الحرب ومدح هرم بن سنان والحارث بن عوف الساعيين في الإصلاح بين عبس وذبيان.' }
+},
+{
+  id:'labid', order:4, name:'لبيد بن ربيعة العامري', epithet:'الشاعر المخضرم',
+  icon:'📖',
+  intro:'عاش عمرًا طويلًا وأدرك الإسلام فهجر الشعر اكتفاءً ببلاغة القرآن.',
+  facts:[
+    'يُقال إنه عاش 145 سنة، معظمها في الجاهلية.',
+    'أدرك الإسلام، فهو شاعر مخضرم: جمع بين العصر الجاهلي وصدر الإسلام.',
+    'أسلم على يد الرسول ﷺ، وعاش في صدر الإسلام.',
+    'كان مع الوفود التي أقبلت على النبي ﷺ.',
+    'حفظ القرآن الكريم.',
+    'هجر الشعر لاكتفائه ببلاغة القرآن.'
+  ],
+  standing:{
+    title:'منزلته',
+    points:[
+      'ظهر نبوغه الشعري منذ صباه.',
+      'رآه النابغة الذبياني فقال له: «يا غلام إن عينيك لعين شاعر».',
+      'من أشراف الشعراء والفرسان والحكماء.',
+      'علّق الرسول ﷺ على قوله «ألا كل شيء ما خلا الله باطل» بأنها أصدق كلمة قالها شاعر.'
+    ]
+  },
+  virtues:{
+    title:'صفاته الحسنة',
+    points:['حسن المعاشرة','حسن المفارقة','حفظ الجار والنجدة','الجلد والصبر على النوائب','العزة والمنعة (القوة)'],
+    quote:'كان يحاسب نفسه على هذه الأخلاق ويقول: «ما عاتب الحر الكريم كنفسه»'
+  },
+  matlaa:{ line1:'عفت الديار محلها فمقامها', line2:'بمنى تأبد غولها فرجامها', blankWord1:'الديار', blankWord2:'غولها' },
+  style:['نبالة الفخر','جزالة الألفاظ','فخامة العبارات','دقة المعاني','شرف المقصد','كثرة اشتماله على عقائد الإيمان','الحكمة الصادقة'],
+  memorize:{ q:'هجر الشعر بعد الإسلام', why:'لبيد بن ربيعة — لاكتفائه ببلاغة القرآن الكريم بعد إسلامه، وهو الشاعر المخضرم بين شعراء المعلقات.' }
+},
+{
+  id:'amr_kulthum', order:5, name:'عمرو بن كلثوم', epithet:'فتاك العرب',
+  icon:'🍷',
+  intro:'سيد وفارس تغلب وشاعرها، وصاحب المعلقة الوحيدة التي بدأت بوصف الخمر لا بالأطلال.',
+  facts:[
+    'سيد وفارس تغلب وشاعرها، وفتّاك العرب.',
+    'أمه ليلى بنت المهلهل، اشتهرت بالأنفة تفاخرًا بأبيها.',
+    'أبوه كلثوم بن مالك، أفرس العرب.',
+    'لم يفخر بوفرة المال وكثرة الإبل، بل بالعزة والمنعة، والقوة في الحروب، وكرم الأصل ومجد الأسلاف.'
+  ],
+  warEvent:{
+    title:'حرب البسوس',
+    desc:'قامت حرب البسوس بين قبيلتي بكر وتغلب. ذهب الفريقان إلى عمرو بن هند للتحكيم، فانحاز لقبيلة بكر، مما أثار غضب عمرو بن كلثوم.'
+  },
+  standing:['تُعدّ معلقته من مفاخر العرب.','أنشدها في سوق عكاظ.','قيل إنها من جيد شعر العرب.'],
+  highlight:'معلقته خالفت منهج القصيدة الجاهلية التقليدي: بدأ بوصف الخمر وليس بالأطلال.',
+  matlaa:{ line1:'ألا هبي بصحنك فاصبحينا', line2:'ولا تبقي خمور الأندرينا', blankWord1:'بصحنك', blankWord2:'الأندرينا' },
+  topics:['وصف الخمر وساقي الخمر','الفخر بالقبيلة وحروبها','التهديد لعمرو بن هند'],
+  style:['طُبعت بطبع الفخر','ألفاظه سهلة','أخيلته ملائمة'],
+  memorize:{ q:'بدأ معلقته بوصف الخمر لا الأطلال', why:'عمرو بن كلثوم — المعلقة الوحيدة من السبع التي خالفت التقليد وبدأت بوصف الخمر بدلًا من البكاء على الأطلال.' }
+},
+{
+  id:'antara', order:6, name:'عنترة بن شداد', epithet:'فارس عبس',
+  icon:'⚔️',
+  intro:'فارس شجاع نظم معلقته ردًا على من عيّره بلونه ونسبه، فسجّل فيها فخره وخصاله.',
+  facts:[
+    'نشأ في عبس، وأمه حبشية، وأبوه أحد سادات عبس.',
+    'كان يدافع عن عبس، وذلك حبًا في عبلة.'
+  ],
+  complexes:{ title:'عقدتاه', points:['رقّة أمه والعبودية.','سواد وجهه ووجه أمه.'] },
+  themes:['فخر ذاتي','فخر قبلي','تغزل في عبلة','قلّ في شعره المدح والرثاء'],
+  reason:{
+    title:'سبب نظم المعلقة',
+    desc:'عابه رجل بسواده وسواد أمه، وقال إنه لا يقول سوى القصائد القصار، فتحدّاه فنظم قصيدة في 75 بيتًا ضمّنها خصاله، ومكارم قومه، وحسن دفاعه عنهم.'
+  },
+  standing:['قيل إنها من أجمل المعلقات.','من أسهلها لفظًا.','أكثرها انسجامًا.','أبدعها وصفًا.','اشتهرت بـ«المذهبة» لحسنها.'],
+  matlaa:{ line1:'هل غادر الشعراء من متردم', line2:'أم هل عرفت الدار بعد توهم', blankWord1:'متردم', blankWord2:'توهم' },
+  topics:['البكاء على الأطلال','وصف محبوبته','الحديث عن الناقة','الفخر الذاتي','يختمها بإنذار من سبّه'],
+  memorize:{ q:'المذهّبة', why:'لقب معلقة عنترة بن شداد لحسنها البالغ — وهي أيضًا من أسهل المعلقات لفظًا وأكثرها انسجامًا.' }
+},
+{
+  id:'harith', order:7, name:'الحارث بن حلزة', epithet:'خطيب بكر',
+  icon:'🏹',
+  intro:'ارتجل معلقته أمام عمرو بن هند ليستميله إلى صف قبيلته بكر، فنجح في ذلك.',
+  facts:[
+    'يمثّل قبيلة بكر، وله دور في الحرب بين تغلب وبكر.',
+    'أنشد معلقته ليستميل عمرو بن هند إلى صفّه، فانحاز له وبالغ في إكرامه.'
+  ],
+  reason:{ title:'مناسبتها', desc:'أثناء تحكيم عمرو بن هند بين بكر وتغلب، ارتجل الحارث بن حلزة معلقته دفاعًا عن قبيلته.' },
+  matlaa:{ line1:'آذنتنا ببينها أسماء', line2:'رب ثاو يمل منه الثواء', blankWord1:'أسماء', blankWord2:'الثواء' },
+  topics:['بكاء على الأطلال','وصف الناقة','الحديث عن الواشين','هجاء تغلب','مدح الملك','فخر القبيلة'],
+  standingText:'تبدو في المعلقة خبرة الشيخ، وكثرة تجاربه، وأناة الحكيم.',
+  memorize:{ q:'أنشدها ليستميل عمرو بن هند', why:'الحارث بن حلزة — ارتجل معلقته أثناء التحكيم فنجح في كسب انحياز الملك لصالح قبيلته بكر.' }
+}
+];
+
+/* الرواة الآخرون المختلف عليهم (بلا تفاصيل إضافية في النوتس) */
+const OTHER_NARRATORS = ['النابغة الذبياني','الأعشى','عبيد بن الأبرص'];
+
+/* سبب التسمية */
+const NAMING_REASONS = [
+  'قيل إنها كُتبت بماء الذهب وعُلّقت على أستار الكعبة.',
+  'كُتبت على رقاع من الجلد وعُلّقت على الخيام.',
+  'تشبه الجواهر والعقود التي عُلّقت في رقاب النساء.',
+  'لأنها كانت تعلق بالأذهان لروعتها.'
+];
+const NAMING_BEST_INDEX = 3; // الرأي الراجح (index في المصفوفة أعلاه = العنصر الرابع)
+
+/* خصائص المعلقات */
+const CHARACTERISTICS = [
+  'الطول','وضوح المعاني','جمال الأسلوب','حسن العبارة','جودة الصياغة',
+  'قوة الألفاظ وجزالتها','جمال الصور البيانية','تصوير البيئة الجاهلية',
+  'البدء بالأطلال، ما عدا معلقة واحدة وهي معلقة عمرو بن كلثوم التي بدأت بوصف الخمر'
+];
+
+/* لا تخلطي بينهم */
+const CONFUSABLES = [
+  { fact:'أول من رثى نفسه', who:'طرفة بن العبد' },
+  { fact:'شاعر السلام', who:'زهير بن أبي سلمى' },
+  { fact:'هجر الشعر بعد الإسلام', who:'لبيد بن ربيعة' },
+  { fact:'بدأ المعلقة بوصف الخمر', who:'عمرو بن كلثوم' },
+  { fact:'الملك الضليل', who:'امرؤ القيس' },
+  { fact:'معلقته تُعدّ أفضل المعلقات', who:'طرفة بن العبد' },
+  { fact:'معلقته اشتهرت بـ«المذهبة»', who:'عنترة بن شداد' },
+  { fact:'أنشد معلقته ليستميل عمرو بن هند', who:'الحارث بن حلزة' }
+];
+
+/* بنك أسئلة الاسترجاع النهائي */
+const QUIZ_BANK = [
+  { type:'mcq', q:'ما لقب امرئ القيس المشهور؟', options:['شاعر السلام','الملك الضليل','فتى الشعراء','خطيب بكر'], correct:'الملك الضليل' },
+  { type:'mcq', q:'من أول شاعر رثى نفسه في الشعر العربي؟', options:['امرؤ القيس','طرفة بن العبد','لبيد بن ربيعة','عنترة بن شداد'], correct:'طرفة بن العبد' },
+  { type:'truefalse', q:'بدأت معلقة عمرو بن كلثوم بالبكاء على الأطلال.', correct:false, explain:'بل بدأت بوصف الخمر — وهي الاستثناء الوحيد بين المعلقات السبع.' },
+  { type:'mcq', q:'من الشاعر الذي لُقّب بـ«شاعر السلام»؟', options:['زهير بن أبي سلمى','عمرو بن كلثوم','الحارث بن حلزة','لبيد بن ربيعة'], correct:'زهير بن أبي سلمى' },
+  { type:'truefalse', q:'زهير بن أبي سلمى هو الشاعر المخضرم بين شعراء المعلقات.', correct:false, explain:'زهير توفي قبل البعثة النبوية. الشاعر المخضرم هو لبيد بن ربيعة.' },
+  { type:'mcq', q:'من الشاعر المخضرم (الذي جمع بين الجاهلية وصدر الإسلام) بين شعراء المعلقات؟', options:['لبيد بن ربيعة','طرفة بن العبد','الحارث بن حلزة','امرؤ القيس'], correct:'لبيد بن ربيعة' },
+  { type:'fillblank', q:'أكمل مطلع امرئ القيس: «قفا نبك من ذكرى ____ ومنزل»', correct:'حبيب' },
+  { type:'mcq', q:'أي شاعر بدأ معلقته بوصف الخمر بدلًا من الأطلال؟', options:['عنترة بن شداد','عمرو بن كلثوم','زهير بن أبي سلمى','طرفة بن العبد'], correct:'عمرو بن كلثوم' },
+  { type:'mcq', q:'كم استغرق زهير بن أبي سلمى لنظم القصيدة في نظام الحوليات؟', options:['شهرًا واحدًا','4 أشهر','سنة كاملة','8 أشهر'], correct:'4 أشهر' },
+  { type:'mcq', q:'من الشاعر الذي قال له النابغة الذبياني: «يا غلام إن عينيك لعين شاعر»؟', options:['لبيد بن ربيعة','عنترة بن شداد','الحارث بن حلزة','طرفة بن العبد'], correct:'لبيد بن ربيعة' },
+  { type:'mcq', q:'ما سبب نظم عنترة بن شداد معلقته؟', options:['رثاء صديق له','أن رجلًا عابه بسواده وسواد أمه فتحدّاه','مدح ملك الحيرة','مناسبة زواج'], correct:'أن رجلًا عابه بسواده وسواد أمه فتحدّاه' },
+  { type:'truefalse', q:'الحارث بن حلزة يمثّل قبيلة تغلب.', correct:false, explain:'الحارث بن حلزة يمثّل قبيلة بكر، وقد أنشد معلقته ليستميل عمرو بن هند إلى صفّها.' },
+  { type:'mcq', q:'أي المعلقات اشتهرت بلقب «المذهّبة» لحسنها؟', options:['معلقة زهير','معلقة عنترة','معلقة الحارث بن حلزة','معلقة لبيد'], correct:'معلقة عنترة' },
+  { type:'mcq', q:'من الشاعر الذي أنشد معلقته ليستميل عمرو بن هند؟', options:['الحارث بن حلزة','عمرو بن كلثوم','طرفة بن العبد','زهير بن أبي سلمى'], correct:'الحارث بن حلزة' },
+  { type:'mcq', q:'ما الرأي الراجح في سبب تسمية المعلقات بهذا الاسم؟', options:['كُتبت بماء الذهب وعُلّقت على الكعبة','كانت تعلق بالأذهان لروعتها','عُلّقت على الخيام','أشبهت العقود المعلّقة في الرقاب'], correct:'كانت تعلق بالأذهان لروعتها' },
+  { type:'mcq', q:'أي شعراء المعلقات السبع لم تبدأ معلقته بالأطلال؟', options:['امرؤ القيس','عمرو بن كلثوم','لبيد بن ربيعة','الحارث بن حلزة'], correct:'عمرو بن كلثوم' },
+  { type:'fillblank', q:'أكمل مطلع طرفة بن العبد: «لخولة أطلال ببرقة ____»', correct:'ثهمد' },
+  { type:'mcq', q:'من قال «ألا كل شيء ما خلا الله باطل»، وعلّق عليها الرسول ﷺ بأنها أصدق كلمة قالها شاعر؟', options:['لبيد بن ربيعة','زهير بن أبي سلمى','عنترة بن شداد','امرؤ القيس'], correct:'لبيد بن ربيعة' }
+];
+
+/* ============================== سجل الدروس ============================== */
+/* لإضافة درس جديد لاحقًا: أضف عنصرًا هنا بنفس الشكل، مع دالة render خاصة به. */
+const LESSONS = [
+  {
+    id:'muallaqat',
+    title:'المعلقات السبع',
+    subtitle:'قمّة الشعر الجاهلي',
+    icon:'📜',
+    homeDesc:'سبعة شعراء، سبع معلقات، وشبكة معلومات مترابطة — من التعريف إلى مطالع القصائد وحتى اختبار استرجاع شامل.',
+    sections:[
+      { id:'intro', label:'مدخل المعلقات' },
+      { id:'explain', label:'الشرح الأساسي' },
+      { id:'poets', label:'ملفات الشعراء' },
+      { id:'memorize', label:'احفظها' },
+      { id:'matlaat', label:'مطالع المعلقات' },
+      { id:'challenge', label:'تحدي المطالع' },
+      { id:'confuse', label:'لا تخلطي بينهم' },
+      { id:'mindmap', label:'خريطة المعلقات' },
+      { id:'quiz', label:'اختبار الاسترجاع' },
+      { id:'errors', label:'مراجعة الأخطاء' },
+      { id:'summary', label:'المراجعة النهائية' }
+    ],
+    render: renderMuallaqatLesson
+  }
+];
+
+/* ============================== هيكل الصفحة ============================== */
+let currentLessonId = null;
+
+function el(html){
+  const d = document.createElement('div');
+  d.innerHTML = html.trim();
+  return d.firstElementChild;
+}
+
+function renderSidebar(){
+  const sb = document.getElementById('sidebar');
+  const totalDone = LESSONS.reduce((a,l)=>a + lessonProgressPct(l.id), 0);
+  sb.innerHTML = `
+    <div class="brand">
+      <div class="brand-mark">د</div>
+      <div class="brand-text">
+        <h1>ديوان</h1>
+        <p>مذاكرة الأدب العربي بذكاء</p>
+      </div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-chip"><div class="n">${STORE.xp||0}</div><div class="l">نقاط الخبرة</div></div>
+      <div class="stat-chip"><div class="n">${(STORE.streak&&STORE.streak.count)||0}🔥</div><div class="l">أيام متتالية</div></div>
+    </div>
+    <div>
+      <div class="nav-label">الدروس</div>
+      <div class="lesson-list" id="lesson-list" style="margin-top:10px;"></div>
+    </div>
+  `;
+  const list = sb.querySelector('#lesson-list');
+  LESSONS.forEach(ls=>{
+    const pct = lessonProgressPct(ls.id);
+    const item = el(`
+      <div>
+        <button class="lesson-item ${currentLessonId===ls.id?'active':''}" data-lesson="${ls.id}" style="width:100%;text-align:right;">
+          <div class="lesson-icon">${ls.icon}</div>
+          <div class="li-text">
+            <div class="t">${ls.title}</div>
+            <div class="sub">${ls.subtitle}</div>
+            <div class="lesson-progress-track"><div class="lesson-progress-fill" style="width:${pct}%"></div></div>
+          </div>
+        </button>
+        <div class="section-toc ${currentLessonId===ls.id?'show':''}" id="toc-${ls.id}"></div>
+      </div>
+    `);
+    item.querySelector('.lesson-item').addEventListener('click', ()=> openLesson(ls.id));
+    list.appendChild(item);
+    if(currentLessonId===ls.id){
+      const toc = item.querySelector('.section-toc');
+      const seen = ensureLesson(ls.id).sectionsSeen;
+      ls.sections.forEach(sec=>{
+        const b = el(`<button class="toc-btn ${seen.includes(sec.id)?'seen':''}"><span class="dot"></span>${sec.label}</button>`);
+        b.addEventListener('click', ()=>{
+          const target = document.getElementById('sec-'+sec.id);
+          if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
+          closeMobileSidebar();
+        });
+        toc.appendChild(b);
+      });
+    }
+  });
+}
+
+function lessonProgressPct(id){
+  const ls = LESSONS.find(x=>x.id===id);
+  if(!ls) return 0;
+  const p = ensureLesson(id);
+  const secPct = ls.sections.length ? (p.sectionsSeen.length / ls.sections.length) * 70 : 0;
+  const quizPct = Math.min(p.quizBest,100)/100 * 20;
+  const matlaaPct = Math.min(p.matlaaLevels.length,5)/5 * 10;
+  return Math.round(secPct + quizPct + matlaaPct);
+}
+
+function renderHome(){
+  currentLessonId = null;
+  renderSidebar();
+  const main = document.getElementById('main');
+  main.innerHTML = `
+    <div class="home-hero">
+      <div class="eyebrow-free">أهلًا بكِ في ديوانك</div>
+      <h2>حوّلي منهج الأدب من حفظ متراكم إلى فهم مترابط تتذكرينه في الامتحان.</h2>
+      <p class="desc">كل درس مقسّم إلى محطات قصيرة: فهم، ثم ربط، ثم مشاهدة، ثم تفاعل، ثم استرجاع، ثم اختبار حقيقي لنفسك، وأخيرًا مراجعة لكل ما أخطأتِ فيه.</p>
+      <button class="hero-cta" id="home-start">ابدئي بدرس المعلقات السبع ←</button>
+    </div>
+    <div class="nav-label" style="margin-bottom:14px;">الدروس المتاحة</div>
+    <div class="lesson-grid" id="home-lesson-grid"></div>
+  `;
+  main.querySelector('#home-start').addEventListener('click', ()=>openLesson('muallaqat'));
+  const grid = main.querySelector('#home-lesson-grid');
+  LESSONS.forEach(ls=>{
+    const pct = lessonProgressPct(ls.id);
+    const card = el(`
+      <div class="lesson-card">
+        <div class="ic">${ls.icon}</div>
+        <h3>${ls.title}</h3>
+        <p>${ls.homeDesc}</p>
+        <div class="lesson-progress-track"><div class="lesson-progress-fill" style="width:${pct}%"></div></div>
+        <div class="go">${pct>0? 'تابعي المذاكرة' : 'ابدئي المذاكرة'} ←</div>
+      </div>
+    `);
+    card.addEventListener('click', ()=>openLesson(ls.id));
+    grid.appendChild(card);
+  });
+}
+
+function openLesson(id){
+  currentLessonId = id;
+  ensureLesson(id);
+  touchStreak();
+  const ls = LESSONS.find(x=>x.id===id);
+  renderSidebar();
+  const main = document.getElementById('main');
+  main.innerHTML = `
+    <div class="lesson-header">
+      <div class="kicker">${ls.subtitle}</div>
+      <h2>${ls.title}</h2>
+      <p class="sub">${ls.homeDesc}</p>
+      <div class="top-progress"><div class="top-progress-fill" id="top-progress-fill"></div></div>
+    </div>
+    <div id="lesson-body"></div>
+  `;
+  ls.render(document.getElementById('lesson-body'), ls);
+  updateTopProgress();
+  setupSectionObserver(ls);
+  closeMobileSidebar();
+  window.scrollTo({top:0});
+}
+
+function updateTopProgress(){
+  const fill = document.getElementById('top-progress-fill');
+  if(fill) fill.style.width = lessonProgressPct(currentLessonId) + '%';
+}
+
+function setupSectionObserver(ls){
+  if(!('IntersectionObserver' in window)){
+    const p = ensureLesson(ls.id);
+    ls.sections.forEach(s=>{ if(!p.sectionsSeen.includes(s.id)) p.sectionsSeen.push(s.id); });
+    saveStore(STORE); renderSidebar(); updateTopProgress();
+    return;
+  }
+  const p = ensureLesson(ls.id);
+  const obs = new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{
+      if(en.isIntersecting){
+        const id = en.target.dataset.secId;
+        if(id && !p.sectionsSeen.includes(id)){
+          p.sectionsSeen.push(id);
+          saveStore(STORE);
+          renderSidebar();
+          updateTopProgress();
+        }
+      }
+    });
+  }, { threshold:0.35 });
+  document.querySelectorAll('.section[data-sec-id]').forEach(s=>obs.observe(s));
+}
+
+function sectionWrap(num, id, title, hint, innerHtml){
+  return `
+    <section class="section" id="sec-${id}" data-sec-id="${id}">
+      <div class="section-head">
+        <div class="section-num">${num}</div>
+        <div>
+          <h3>${title}</h3>
+          ${hint? `<div class="shint">${hint}</div>` : ''}
+        </div>
+      </div>
+      ${innerHtml}
+    </section>
+  `;
+}
+
+/* ---------------------------- المودال (ملف الشاعر) ---------------------------- */
+function openPoetModal(poetId){
+  const p = POETS.find(x=>x.id===poetId);
+  if(!p) return;
+  const layer = document.getElementById('modal-layer');
+  const box = document.getElementById('modal-box');
+
+  let html = `<button class="modal-close" id="modal-close">✕</button>`;
+  html += `<div class="mh-badge">${p.icon} ملف الشاعر</div>`;
+  html += `<h3>${p.name}</h3>`;
+  html += `<div class="mh-order">المعلقة رقم ${p.order} من سبع معلقات</div>`;
+
+  if(p.titleUncertain){
+    html += `<div class="warn-tag">⚠️ لقب غير مؤكد تمامًا في المصدر: «${p.titleUncertain.text}»</div>`;
+  } else {
+    html += `<div class="chips" style="margin-top:12px;"><span class="chip">${p.epithet}</span></div>`;
+  }
+
+  html += `<div class="mblock"><h5>نبذة</h5><p class="prose" style="max-width:100%;">${p.intro}</p></div>`;
+
+  if(p.facts){
+    html += `<div class="mblock"><h5>معلومات مهمة</h5><ul class="fact-list">${p.facts.map(f=>`<li>${f}</li>`).join('')}</ul></div>`;
+  }
+  if(p.hawliyyat){
+    html += `<div class="mblock"><h5>${p.hawliyyat.title}</h5><p class="prose" style="max-width:100%;">${p.hawliyyat.desc}</p>
+      <ul class="fact-list">${p.hawliyyat.steps.map(s=>`<li><strong>${s.t}:</strong> ${s.d}</li>`).join('')}</ul></div>`;
+  }
+  if(p.omarOpinion){
+    html += `<div class="mblock"><h5>${p.omarOpinion.title}</h5><p class="prose" style="max-width:100%;">${p.omarOpinion.desc}</p>
+      <ul class="fact-list">${p.omarOpinion.points.map(s=>`<li>${s}</li>`).join('')}</ul></div>`;
+  }
+  if(p.standing && typeof p.standing === 'object' && p.standing.points){
+    html += `<div class="mblock"><h5>${p.standing.title}</h5><ul class="fact-list">${p.standing.points.map(s=>`<li>${s}</li>`).join('')}</ul></div>`;
+  } else if(p.standing && Array.isArray(p.standing)){
+    html += `<div class="mblock"><h5>مكانة المعلقة</h5><ul class="fact-list">${p.standing.map(s=>`<li>${s}</li>`).join('')}</ul></div>`;
+  } else if(p.standing && typeof p.standing === 'string'){
+    html += `<div class="mblock"><h5>مكانة المعلقة</h5><p class="prose" style="max-width:100%;">${p.standing}</p></div>`;
+  }
+  if(p.standingText){
+    html += `<div class="mblock"><h5>طابع المعلقة</h5><p class="prose" style="max-width:100%;">${p.standingText}</p></div>`;
+  }
+  if(p.virtues){
+    html += `<div class="mblock"><h5>${p.virtues.title}</h5><ul class="fact-list">${p.virtues.points.map(s=>`<li>${s}</li>`).join('')}</ul>
+      <p class="prose" style="max-width:100%;margin-top:8px;">${p.virtues.quote}</p></div>`;
+  }
+  if(p.complexes){
+    html += `<div class="mblock"><h5>${p.complexes.title}</h5><ul class="fact-list">${p.complexes.points.map(s=>`<li>${s}</li>`).join('')}</ul></div>`;
+  }
+  if(p.themes){
+    html += `<div class="mblock"><h5>أغراض شعره</h5><div class="chips">${p.themes.map(s=>`<span class="chip">${s}</span>`).join('')}</div></div>`;
+  }
+  if(p.reason){
+    html += `<div class="mblock"><h5>${p.reason.title}</h5><p class="prose" style="max-width:100%;">${p.reason.desc}</p></div>`;
+  }
+  if(p.warEvent){
+    html += `<div class="mblock"><h5>${p.warEvent.title}</h5><p class="prose" style="max-width:100%;">${p.warEvent.desc}</p></div>`;
+  }
+  if(p.highlight){
+    html += `<div class="mblock"><div class="warn-tag" style="border-color:var(--gold);color:var(--gold-soft);background:rgba(203,162,76,.12);">🚨 ${p.highlight}</div></div>`;
+  }
+  if(p.style){
+    html += `<div class="mblock"><h5>تميز شعره</h5><div class="chips">${p.style.map(s=>`<span class="chip">${s}</span>`).join('')}</div></div>`;
+  }
+  if(p.topics){
+    html += `<div class="mblock"><h5>موضوعات المعلقة</h5><div class="chips">${p.topics.map(s=>`<span class="chip">${s}</span>`).join('')}</div></div>`;
+  }
+  html += `<div class="mblock"><h5>مطلع المعلقة</h5>
+    <div class="matlaa-card">
+      <div class="v1 verse">${p.matlaa.line1}</div>
+      <div class="v2 verse">${p.matlaa.line2}</div>
+      <div class="tag">${p.name}</div>
+    </div>
+  </div>`;
+  html += `<div class="mblock" style="background:linear-gradient(90deg,#241C0F,#182642);border:1px solid var(--gold);border-radius:var(--radius-md);padding:14px 16px;">
+      <h5 style="margin-bottom:6px;">🧠 احفظها</h5>
+      <div style="font-weight:800;color:var(--gold-soft);font-size:14.5px;">${p.memorize.q}</div>
+      <div style="font-size:12.5px;color:var(--text-mid);margin-top:6px;">${p.memorize.why}</div>
+    </div>`;
+
+  box.innerHTML = html;
+  layer.classList.add('open');
+  box.querySelector('#modal-close').addEventListener('click', closeModal);
+}
+function closeModal(){ document.getElementById('modal-layer').classList.remove('open'); }
+document.getElementById('modal-bg').addEventListener('click', closeModal);
+
+/* ============================== درس المعلقات السبع ============================== */
+function renderMuallaqatLesson(container, lessonMeta){
+  let n = 1;
+  let html = '';
+
+  /* ① مدخل جذاب */
+  html += sectionWrap(n++, 'intro', 'المعلقات في سطور', 'قبل التفاصيل، هذه هي الصورة الكبيرة', `
+    <p class="prose">المعلقات قصائد طوال، ومن أجود الشعر الجاهلي على الإطلاق. قالها كبار الشعراء في مناسبات خاصة، وتعددت أغراضها، واستحسنها العرب حتى صارت أعلى مكانة في شعرهم.</p>
+    <div class="grid-3" style="margin-top:18px;">
+      <div class="card"><div style="font-size:22px;">7️⃣</div><p class="prose" style="margin-top:8px;">سبعة شعراء متفق عليهم، وثلاثة أسماء أخرى مختلف فيها.</p></div>
+      <div class="card"><div style="font-size:22px;">🏅</div><p class="prose" style="margin-top:8px;">من خير شعر العرب لفصاحته وتصويره الدقيق للبيئة الجاهلية.</p></div>
+      <div class="card"><div style="font-size:22px;">📜</div><p class="prose" style="margin-top:8px;">كل معلقة تبدأ بالبكاء على الأطلال — إلا واحدة، وسنكتشفها معًا.</p></div>
+    </div>
+  `);
+
+  /* ② الشرح الأساسي */
+  const reasonsHtml = NAMING_REASONS.map((r,i)=>`
+    <div class="reason-item ${i===NAMING_BEST_INDEX-1?'best':''}">
+      <div class="reason-num">${i+1}</div>
+      <div>
+        <p>${r}</p>
+        ${i===NAMING_BEST_INDEX-1? '<div class="best-tag">★ الرأي الراجح</div>' : ''}
+      </div>
+    </div>
+  `).join('');
+  html += sectionWrap(n++, 'explain', 'الشرح الأساسي', 'التعريف، وسبب التسمية، والخصائص', `
+    <p class="prose"><strong style="color:var(--text-hi);">لماذا سُمّيت «المعلقات»؟</strong> — أربعة آراء وردت في هذا:</p>
+    <div class="reason-list" style="margin-top:12px;">${reasonsHtml}</div>
+
+    <div style="margin-top:26px;">
+      <p class="prose"><strong style="color:var(--text-hi);">خصائص المعلقات</strong></p>
+      <div class="chips" style="margin-top:10px;">${CHARACTERISTICS.map(c=>`<span class="chip">${c}</span>`).join('')}</div>
+    </div>
+
+    <div style="margin-top:26px;">
+      <p class="prose"><strong style="color:var(--text-hi);">شعراء المعلقات السبعة</strong></p>
+      <div class="poets-strip" style="margin-top:10px;">
+        ${POETS.map(p=>`<div class="poet-pill"><span class="idx">${p.order}</span>${p.name}</div>`).join('')}
+      </div>
+      <p class="alt-note">⚠️ بعض الرواة يرون أن للمعلقات عشرة، والثلاثة الآخرون حسب هذه الرواية: ${OTHER_NARRATORS.join('، ')} — دون تفاصيل إضافية عنهم في المنهج الحالي.</p>
+    </div>
+  `);
+
+  /* ③ ملفات الشعراء */
+  html += sectionWrap(n++, 'poets', 'ملفات الشعراء', 'اضغطي على أي بطاقة لفتح الملف الكامل', `
+    <div class="poet-grid">
+      ${POETS.map(p=>`
+        <div class="poet-card" data-poet="${p.id}">
+          <div class="pc-order">${String(p.order).padStart(2,'0')}</div>
+          <div class="pc-badge">${p.icon} ${p.titleUncertain? p.titleUncertain.text+' ؟' : p.epithet}</div>
+          <h4>${p.name}</h4>
+          <div class="pc-hint">افتحي الملف ←</div>
+        </div>
+      `).join('')}
+    </div>
+  `);
+
+  /* ④ احفظها */
+  html += sectionWrap(n++, 'memorize', 'احفظها', 'اقلبي البطاقة لترى الرابط الذي يثبّت المعلومة', `
+    <div class="flip-grid">
+      ${POETS.map((p,i)=>`
+        <div class="flip-card" data-flip="${i}">
+          <div class="flip-inner">
+            <div class="flip-face flip-front">
+              <div class="icon">🧠</div>
+              <div class="q">${p.memorize.q}</div>
+              <div class="tap">اضغطي لمعرفة الشاعر</div>
+            </div>
+            <div class="flip-face flip-back">
+              <div class="ans">${p.name}</div>
+              <div class="why">${p.memorize.why}</div>
+            </div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `);
+
+  /* ⑤ مطالع المعلقات */
+  html += sectionWrap(n++, 'matlaat', 'مطالع المعلقات', 'من أهم ما يجب حفظه — كل مطلع مرتبط مباشرة بشاعره', `
+    <div class="matlaa-grid">
+      ${POETS.map(p=>`
+        <div class="matlaa-tile">
+          <div class="poet-name">${p.name}</div>
+          <div class="verse">${p.matlaa.line1}<br>${p.matlaa.line2}</div>
+        </div>
+      `).join('')}
+    </div>
+  `);
+
+  /* ⑥ تحدي المطالع */
+  html += sectionWrap(n++, 'challenge', 'تحدي المطالع', 'خمسة مستويات تصاعدية لتثبيت المطالع في الذاكرة', `
+    <div class="level-tabs" id="matlaa-tabs"></div>
+    <div id="matlaa-body"></div>
+  `);
+
+  /* ⑦ لا تخلطي بينهم */
+  html += sectionWrap(n++, 'confuse', 'لا تخلطي بينهم', 'أكثر المعلومات التي يسهل الخلط بينها', `
+    <div>
+      ${CONFUSABLES.map(c=>`
+        <div class="confuse-row">
+          <div class="fact">${c.fact}</div>
+          <div class="arrow">←</div>
+          <div class="who">${c.who}</div>
+        </div>
+      `).join('')}
+    </div>
+  `);
+
+  /* ⑧ خريطة المعلقات */
+  html += sectionWrap(n++, 'mindmap', 'خريطة المعلقات', 'شبكة مترابطة بدل سبعة ملفات منفصلة', `
+    <div class="mindmap-wrap">
+      <div class="mindmap-canvas" id="mindmap-canvas">
+        <svg id="mindmap-svg"></svg>
+        <div class="mindmap-center">المعلقات<br>السبع</div>
+      </div>
+    </div>
+  `);
+
+  /* ⑨ اختبار الاسترجاع */
+  html += sectionWrap(n++, 'quiz', 'اختبار الاسترجاع', 'بدون مساعدة — اكتبي أو اختاري من ذاكرتك مباشرة', `
+    <div id="quiz-area"></div>
+  `);
+
+  /* ⑩ مراجعة الأخطاء */
+  html += sectionWrap(n++, 'errors', 'بنك الأخطاء', 'كل ما أخطأتِ فيه سابقًا، في مكان واحد', `
+    <div id="errors-area"></div>
+  `);
+
+  /* ⑪ المراجعة النهائية */
+  html += sectionWrap(n++, 'summary', 'المراجعة النهائية', 'كل شاعر في نظرة واحدة قبل الامتحان', `
+    <div class="summary-grid">
+      ${POETS.map(p=>`
+        <div class="summary-card">
+          <div class="nm">${p.order}. ${p.name}</div>
+          <div class="ep">${p.titleUncertain? p.titleUncertain.text+' ؟' : p.epithet}</div>
+          <div class="vs verse">${p.matlaa.line1}</div>
+          <div class="tp">${p.topics? p.topics[0] : (p.highlight||'')}</div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="finish-banner">
+      <div class="big">🏆 أنهيتِ خريطة المعلقات السبع كاملة</div>
+      <p>راجعي بنك الأخطاء بين الحين والآخر، وارجعي لتحدي المطالع كلما احتجتِ لتثبيت مطلع بعينه.</p>
+    </div>
+  `);
+
+  container.innerHTML = html;
+
+  /* تفعيل التفاعلات بعد إدراج الـ HTML */
+  container.querySelectorAll('.poet-card').forEach(c=>{
+    c.addEventListener('click', ()=>{ openPoetModal(c.dataset.poet); addXPOnce('open_'+c.dataset.poet, 2); });
+  });
+  container.querySelectorAll('.flip-card').forEach(c=>{
+    c.addEventListener('click', ()=> c.classList.toggle('flipped'));
+  });
+
+  buildMindMap(container.querySelector('#mindmap-canvas'));
+  buildMatlaaChallenge(container);
+  buildQuiz(container.querySelector('#quiz-area'));
+  buildErrorBank(container.querySelector('#errors-area'));
+}
+
+/* عدم تكرار منح XP لنفس الإجراء */
+function addXPOnce(key, amount){
+  const p = ensureLesson(currentLessonId);
+  p._xpKeys = p._xpKeys || [];
+  if(p._xpKeys.includes(key)) return;
+  p._xpKeys.push(key);
+  saveStore(STORE);
+  addXP(amount);
+}
+
+/* ---------------------------- خريطة المعلقات (Mind map) ---------------------------- */
+function buildMindMap(canvas){
+  if(!canvas) return;
+  const svg = canvas.querySelector('#mindmap-svg');
+  const isMobile = window.innerWidth <= 760;
+  if(isMobile){
+    POETS.forEach(p=>{
+      const node = el(`
+        <div class="mm-node" data-poet="${p.id}">
+          <div class="nm">${p.name}</div>
+          <div class="ep">${p.titleUncertain? p.titleUncertain.text : p.epithet}</div>
+          <div class="tp">${p.topics? p.topics[0] : (p.highlight||'')}</div>
+        </div>
+      `);
+      node.addEventListener('click', ()=>openPoetModal(p.id));
+      canvas.appendChild(node);
+    });
+    return;
+  }
+  const W = canvas.clientWidth || 900, H = 560;
+  const cx = W/2, cy = H/2;
+  const R = Math.min(W,H)/2 - 90;
+  let lines = '';
+  POETS.forEach((p,i)=>{
+    const angle = (i / POETS.length) * Math.PI * 2 - Math.PI/2;
+    const x = cx + R * Math.cos(angle);
+    const y = cy + R * Math.sin(angle);
+    lines += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="rgba(203,162,76,.35)" stroke-width="1.5" stroke-dasharray="4 4"/>`;
+    const node = el(`
+      <div class="mm-node" data-poet="${p.id}" style="right:${(x-66)}px;top:${(y-40)}px;">
+        <div class="nm">${p.name}</div>
+        <div class="ep">${p.titleUncertain? p.titleUncertain.text : p.epithet}</div>
+        <div class="tp">${p.topics? p.topics[0] : (p.highlight||'')}</div>
+      </div>
+    `);
+    node.style.right = x - 66 + 'px';
+    node.style.left = 'auto';
+    node.style.right = (W - x - 66) + 'px';
+    node.style.top = (y-40) + 'px';
+    node.addEventListener('click', ()=>openPoetModal(p.id));
+    canvas.appendChild(node);
+  });
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svg.innerHTML = lines;
+}
+
+/* ---------------------------- تحدي المطالع (5 مستويات) ---------------------------- */
+function buildMatlaaChallenge(container){
+  const tabsEl = container.querySelector('#matlaa-tabs');
+  const bodyEl = container.querySelector('#matlaa-body');
+  const levels = [
+    {n:1, label:'اختاري المطلع الصحيح'},
+    {n:2, label:'خمّني الشاعر من المطلع'},
+    {n:3, label:'أكملي الكلمات الناقصة'},
+    {n:4, label:'رتّبي كلمات المطلع'},
+    {n:5, label:'راجعي أخطاءك'}
+  ];
+  let activeLevel = 1;
+
+  function renderTabs(){
+    const p = ensureLesson(currentLessonId);
+    tabsEl.innerHTML = '';
+    levels.forEach(lv=>{
+      const done = p.matlaaLevels.includes(lv.n);
+      const b = el(`<button class="level-tab ${activeLevel===lv.n?'active':''}">المستوى ${lv.n} — ${lv.label} ${done? '<span class="done">✓</span>' : ''}</button>`);
+      b.addEventListener('click', ()=>{ activeLevel = lv.n; renderTabs(); renderLevel(); });
+      tabsEl.appendChild(b);
+    });
+  }
+
+  function markLevelDone(n){
+    const p = ensureLesson(currentLessonId);
+    if(!p.matlaaLevels.includes(n)){ p.matlaaLevels.push(n); saveStore(STORE); renderSidebar(); updateTopProgress(); addXP(8); }
+  }
+
+  function renderLevel(){
+    bodyEl.innerHTML = '';
+    if(activeLevel===1) runLevel1();
+    else if(activeLevel===2) runLevel2();
+    else if(activeLevel===3) runLevel3();
+    else if(activeLevel===4) runLevel4();
+    else runLevel5();
+  }
+
+  function questionShell(){
+    const shell = el(`
+      <div class="q-shell">
+        <div class="q-progress"><div class="track"><div class="fill" id="ml-fill"></div></div><div class="count" id="ml-count"></div></div>
+        <div id="ml-content"></div>
+      </div>
+    `);
+    bodyEl.appendChild(shell);
+    return shell;
+  }
+
+  function updateProgUI(shell, idx, total){
+    shell.querySelector('#ml-fill').style.width = Math.round((idx/total)*100)+'%';
+    shell.querySelector('#ml-count').textContent = `${idx} / ${total}`;
+  }
+
+  function runLevel1(){
+    const shell = questionShell();
+    const order = shuffle(POETS);
+    let idx = 0, correctCount = 0;
+    function next(){
+      if(idx>=order.length){ finishLevel(shell, correctCount, order.length, 1); return; }
+      const poet = order[idx];
+      const distractors = shuffle(POETS.filter(p=>p.id!==poet.id)).slice(0,3);
+      const opts = shuffle([poet, ...distractors]);
+      updateProgUI(shell, idx, order.length);
+      const content = shell.querySelector('#ml-content');
+      content.innerHTML = `
+        <div class="q-prompt">ما مطلع معلقة «${poet.name}»؟</div>
+        <div class="q-options">${opts.map((o,i)=>`<button class="q-opt" data-i="${i}">${o.matlaa.line1}</button>`).join('')}</div>
+        <div class="q-feedback" id="ml-fb"></div>
+      `;
+      content.querySelectorAll('.q-opt').forEach((btn,i)=>{
+        btn.addEventListener('click', ()=>{
+          content.querySelectorAll('.q-opt').forEach(b=>b.setAttribute('disabled','true'));
+          const chosen = opts[i];
+          const fb = content.querySelector('#ml-fb');
+          if(chosen.id===poet.id){
+            btn.classList.add('correct'); correctCount++;
+            fb.className='q-feedback show ok'; fb.textContent = 'إجابة صحيحة ✓';
+          } else {
+            btn.classList.add('wrong');
+            content.querySelectorAll('.q-opt')[opts.findIndex(o=>o.id===poet.id)].classList.add('correct');
+            fb.className='q-feedback show bad'; fb.textContent = `غير صحيح — مطلع ${poet.name} هو: «${poet.matlaa.line1}»`;
+            recordMistake(currentLessonId,'matlaa', 'مطلع '+poet.name, poet.matlaa.line1);
+          }
+          idx++;
+          setTimeout(next, 1300);
+        });
+      });
+    }
+    next();
+  }
+
+  function runLevel2(){
+    const shell = questionShell();
+    const order = shuffle(POETS);
+    let idx=0, correctCount=0;
+    function next(){
+      if(idx>=order.length){ finishLevel(shell, correctCount, order.length, 2); return; }
+      const poet = order[idx];
+      const distractors = shuffle(POETS.filter(p=>p.id!==poet.id)).slice(0,3);
+      const opts = shuffle([poet, ...distractors]);
+      updateProgUI(shell, idx, order.length);
+      const content = shell.querySelector('#ml-content');
+      content.innerHTML = `
+        <div class="q-prompt">من صاحب هذا المطلع؟</div>
+        <div class="q-verse">${poet.matlaa.line1}<br>${poet.matlaa.line2}</div>
+        <div class="q-options">${opts.map((o,i)=>`<button class="q-opt" data-i="${i}">${o.name}</button>`).join('')}</div>
+        <div class="q-feedback" id="ml-fb"></div>
+      `;
+      content.querySelectorAll('.q-opt').forEach((btn,i)=>{
+        btn.addEventListener('click', ()=>{
+          content.querySelectorAll('.q-opt').forEach(b=>b.setAttribute('disabled','true'));
+          const chosen = opts[i];
+          const fb = content.querySelector('#ml-fb');
+          if(chosen.id===poet.id){
+            btn.classList.add('correct'); correctCount++;
+            fb.className='q-feedback show ok'; fb.textContent = 'إجابة صحيحة ✓';
+          } else {
+            btn.classList.add('wrong');
+            content.querySelectorAll('.q-opt')[opts.findIndex(o=>o.id===poet.id)].classList.add('correct');
+            fb.className='q-feedback show bad'; fb.textContent = `الصحيح هو ${poet.name}`;
+            recordMistake(currentLessonId,'matlaa', 'صاحب مطلع: '+poet.matlaa.line1, poet.name);
+          }
+          idx++;
+          setTimeout(next, 1300);
+        });
+      });
+    }
+    next();
+  }
+
+  function runLevel3(){
+    const shell = questionShell();
+    const order = shuffle(POETS);
+    let idx=0, correctCount=0;
+    function next(){
+      if(idx>=order.length){ finishLevel(shell, correctCount, order.length, 3); return; }
+      const poet = order[idx];
+      updateProgUI(shell, idx, order.length);
+      const content = shell.querySelector('#ml-content');
+      const l1 = poet.matlaa.line1.replace(poet.matlaa.blankWord1, '____');
+      const l2 = poet.matlaa.line2.replace(poet.matlaa.blankWord2, '____');
+      content.innerHTML = `
+        <div class="q-prompt">أكملي الكلمتين الناقصتين من مطلع ${poet.name}:</div>
+        <div class="q-verse">${l1}<br>${l2}</div>
+        <div class="q-fill-row">
+          <input type="text" id="fill1" placeholder="الكلمة الأولى">
+          <input type="text" id="fill2" placeholder="الكلمة الثانية">
+        </div>
+        <div class="btn-row" style="justify-content:center;"><button class="btn btn-gold" id="fill-check">تحقّقي</button></div>
+        <div class="q-feedback" id="ml-fb"></div>
+      `;
+      content.querySelector('#fill-check').addEventListener('click', ()=>{
+        const v1 = content.querySelector('#fill1').value.trim();
+        const v2 = content.querySelector('#fill2').value.trim();
+        const ok = v1===poet.matlaa.blankWord1 && v2===poet.matlaa.blankWord2;
+        const fb = content.querySelector('#ml-fb');
+        content.querySelector('#fill-check').setAttribute('disabled','true');
+        if(ok){ correctCount++; fb.className='q-feedback show ok'; fb.textContent='إجابة صحيحة تمامًا ✓'; }
+        else{
+          fb.className='q-feedback show bad';
+          fb.textContent = `الكلمتان الصحيحتان: «${poet.matlaa.blankWord1}» و«${poet.matlaa.blankWord2}»`;
+          recordMistake(currentLessonId,'matlaa','إكمال مطلع '+poet.name, poet.matlaa.blankWord1+' / '+poet.matlaa.blankWord2);
+        }
+        idx++;
+        setTimeout(next, 1500);
+      });
+    }
+    next();
+  }
+
+  function runLevel4(){
+    const shell = questionShell();
+    const order = shuffle(POETS);
+    let idx=0, correctCount=0;
+    function next(){
+      if(idx>=order.length){ finishLevel(shell, correctCount, order.length, 4); return; }
+      const poet = order[idx];
+      updateProgUI(shell, idx, order.length);
+      const content = shell.querySelector('#ml-content');
+      const words = poet.matlaa.line1.split(' ');
+      const shuffled = shuffle(words);
+      let picked = [];
+      content.innerHTML = `
+        <div class="q-prompt">رتّبي كلمات الشطر الأول من مطلع ${poet.name}:</div>
+        <div class="q-order-slot" id="slot"></div>
+        <div class="q-order-pool" id="pool"></div>
+        <div class="btn-row" style="justify-content:center;"><button class="btn btn-ghost" id="reset-order">إعادة</button></div>
+        <div class="q-feedback" id="ml-fb"></div>
+      `;
+      const pool = content.querySelector('#pool');
+      const slot = content.querySelector('#slot');
+      function renderPool(){
+        pool.innerHTML = shuffled.map((w,i)=>`<button class="q-word" data-i="${i}" ${picked.includes(i)?'style="opacity:.25;pointer-events:none;"':''}>${w}</button>`).join('');
+        pool.querySelectorAll('.q-word').forEach(btn=>{
+          btn.addEventListener('click', ()=>{
+            const i = +btn.dataset.i;
+            picked.push(i);
+            renderAll();
+            if(picked.length===words.length) checkOrder();
+          });
+        });
+      }
+      function renderSlot(){
+        slot.innerHTML = picked.map(i=>`<span class="q-word picked">${shuffled[i]}</span>`).join('') || '<span style="color:var(--text-dim);font-size:12px;">اضغطي على الكلمات بالترتيب الصحيح</span>';
+      }
+      function renderAll(){ renderPool(); renderSlot(); }
+      content.querySelector('#reset-order').addEventListener('click', ()=>{ picked=[]; renderAll(); });
+      function checkOrder(){
+        const built = picked.map(i=>shuffled[i]).join(' ');
+        const fb = content.querySelector('#ml-fb');
+        const ok = built === poet.matlaa.line1;
+        if(ok){ correctCount++; fb.className='q-feedback show ok'; fb.textContent='ترتيب صحيح ✓'; }
+        else{
+          fb.className='q-feedback show bad';
+          fb.textContent = `الترتيب الصحيح: «${poet.matlaa.line1}»`;
+          recordMistake(currentLessonId,'matlaa','ترتيب مطلع '+poet.name, poet.matlaa.line1);
+        }
+        idx++;
+        setTimeout(next, 1600);
+      }
+      renderAll();
+    }
+    next();
+  }
+
+  function runLevel5(){
+    const shell = questionShell();
+    shell.querySelector('#ml-fill').parentElement.style.display='none';
+    const content = shell.querySelector('#ml-content');
+    const mistakes = ERRORS.filter(e=>e.lessonId===currentLessonId && e.category==='matlaa');
+    if(mistakes.length===0){
+      content.innerHTML = `<div class="empty-note">🎉 لا توجد أخطاء مسجّلة في المطالع حتى الآن — استمري!</div>`;
+      return;
+    }
+    content.innerHTML = mistakes.map(m=>`
+      <div class="mistake-item">
+        <div class="mi-main">
+          <div class="q">${m.question}</div>
+          <div class="a">الإجابة الصحيحة: ${m.correctAnswer}</div>
+        </div>
+        <div class="times">أخطأتِ ${m.count} مرة</div>
+      </div>
+    `).join('');
+  }
+
+  function finishLevel(shell, correct, total, levelNum){
+    const content = shell.querySelector('#ml-content');
+    shell.querySelector('#ml-fill').style.width='100%';
+    shell.querySelector('#ml-count').textContent = `${total} / ${total}`;
+    content.innerHTML = `
+      <div class="q-result">
+        <div class="score">${correct} / ${total}</div>
+        <p>نتيجتك في هذا المستوى</p>
+        <div class="btn-row" style="justify-content:center;margin-top:16px;">
+          <button class="btn btn-gold" id="ml-again">إعادة المستوى</button>
+        </div>
+      </div>
+    `;
+    content.querySelector('#ml-again').addEventListener('click', renderLevel);
+    markLevelDone(levelNum);
+  }
+
+  renderTabs();
+  renderLevel();
+}
+
+/* ---------------------------- اختبار الاسترجاع النهائي ---------------------------- */
+function buildQuiz(container){
+  if(!container) return;
+  container.innerHTML = `
+    <div class="q-shell" id="quiz-shell">
+      <p class="prose" style="margin-bottom:16px;">اختبار من 12 سؤالًا مُنتقاة عشوائيًا من كل المعلقات — أجيبي من ذاكرتك مباشرة.</p>
+      <button class="btn btn-gold" id="quiz-start">ابدئي الاختبار</button>
+    </div>
+  `;
+  container.querySelector('#quiz-start').addEventListener('click', ()=>runQuiz(container));
+}
+
+function runQuiz(container){
+  const questions = shuffle(QUIZ_BANK).slice(0,12);
+  let idx=0, correct=0;
+  const shell = container.querySelector('#quiz-shell');
+
+  function next(){
+    if(idx>=questions.length){ finish(); return; }
+    const q = questions[idx];
+    shell.innerHTML = `
+      <div class="q-progress"><div class="track"><div class="fill" style="width:${Math.round((idx/questions.length)*100)}%"></div></div><div class="count">${idx+1} / ${questions.length}</div></div>
+      <div id="qz-body"></div>
+    `;
+    const body = shell.querySelector('#qz-body');
+
+    if(q.type==='mcq'){
+      const opts = shuffle(q.options);
+      body.innerHTML = `
+        <div class="q-prompt">${q.q}</div>
+        <div class="q-options">${opts.map((o,i)=>`<button class="q-opt" data-i="${i}">${o}</button>`).join('')}</div>
+        <div class="q-feedback" id="qz-fb"></div>
+      `;
+      body.querySelectorAll('.q-opt').forEach((btn,i)=>{
+        btn.addEventListener('click', ()=>{
+          body.querySelectorAll('.q-opt').forEach(b=>b.setAttribute('disabled','true'));
+          const fb = body.querySelector('#qz-fb');
+          if(opts[i]===q.correct){ btn.classList.add('correct'); correct++; fb.className='q-feedback show ok'; fb.textContent='إجابة صحيحة ✓'; }
+          else{
+            btn.classList.add('wrong');
+            body.querySelectorAll('.q-opt')[opts.findIndex(o=>o===q.correct)].classList.add('correct');
+            fb.className='q-feedback show bad'; fb.textContent = `الصحيح: ${q.correct}`;
+            recordMistake(currentLessonId,'quiz', q.q, q.correct);
+          }
+          idx++; setTimeout(next,1300);
+        });
+      });
+    } else if(q.type==='truefalse'){
+      body.innerHTML = `
+        <div class="q-prompt">${q.q}</div>
+        <div class="q-options">
+          <button class="q-opt" data-v="true">صح ✓</button>
+          <button class="q-opt" data-v="false">خطأ ✗</button>
+        </div>
+        <div class="q-feedback" id="qz-fb"></div>
+      `;
+      body.querySelectorAll('.q-opt').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          body.querySelectorAll('.q-opt').forEach(b=>b.setAttribute('disabled','true'));
+          const val = btn.dataset.v==='true';
+          const fb = body.querySelector('#qz-fb');
+          if(val===q.correct){ btn.classList.add('correct'); correct++; fb.className='q-feedback show ok'; fb.textContent='إجابة صحيحة ✓'; }
+          else{
+            btn.classList.add('wrong');
+            fb.className='q-feedback show bad'; fb.textContent = q.explain || 'إجابة غير صحيحة';
+            recordMistake(currentLessonId,'quiz', q.q, q.correct? 'صح':'خطأ');
+          }
+          idx++; setTimeout(next,1500);
+        });
+      });
+    } else if(q.type==='fillblank'){
+      body.innerHTML = `
+        <div class="q-prompt">${q.q}</div>
+        <div class="q-fill-row"><input type="text" id="qz-fill" placeholder="اكتبي الكلمة"></div>
+        <div class="btn-row" style="justify-content:center;"><button class="btn btn-gold" id="qz-check">تحقّقي</button></div>
+        <div class="q-feedback" id="qz-fb"></div>
+      `;
+      body.querySelector('#qz-check').addEventListener('click', ()=>{
+        const v = body.querySelector('#qz-fill').value.trim();
+        const fb = body.querySelector('#qz-fb');
+        body.querySelector('#qz-check').setAttribute('disabled','true');
+        if(v===q.correct){ correct++; fb.className='q-feedback show ok'; fb.textContent='إجابة صحيحة ✓'; }
+        else{ fb.className='q-feedback show bad'; fb.textContent = `الصحيح: ${q.correct}`; recordMistake(currentLessonId,'quiz', q.q, q.correct); }
+        idx++; setTimeout(next,1400);
+      });
+    }
+  }
+
+  function finish(){
+    const pct = Math.round((correct/questions.length)*100);
+    const p = ensureLesson(currentLessonId);
+    p.quizBest = Math.max(p.quizBest||0, pct);
+    p.quizRuns = (p.quizRuns||0)+1;
+    saveStore(STORE);
+    renderSidebar(); updateTopProgress();
+    addXP(10 + correct*2);
+    shell.innerHTML = `
+      <div class="q-result">
+        <div class="score">${pct}%</div>
+        <p>أجبتِ بشكل صحيح على ${correct} من ${questions.length} سؤالًا</p>
+        <div class="btn-row" style="justify-content:center;margin-top:16px;">
+          <button class="btn btn-gold" id="qz-again">اختبار جديد</button>
+        </div>
+      </div>
+    `;
+    shell.querySelector('#qz-again').addEventListener('click', ()=>buildQuiz(container.parentElement) || runQuiz(container.parentElement));
+    const errArea = document.querySelector('#errors-area');
+    if(errArea) buildErrorBank(errArea);
+  }
+
+  next();
+}
+
+/* ---------------------------- بنك الأخطاء ---------------------------- */
+function buildErrorBank(container){
+  if(!container) return;
+  const mine = ERRORS.filter(e=>e.lessonId===currentLessonId).sort((a,b)=>b.count-a.count);
+  if(mine.length===0){
+    container.innerHTML = `<div class="empty-note">لا توجد أخطاء مسجّلة بعد في هذا الدرس — كل ما تخطئين فيه أثناء التحدي أو الاختبار سيظهر هنا تلقائيًا.</div>`;
+    return;
+  }
+  container.innerHTML = mine.map(m=>`
+    <div class="mistake-item">
+      <div class="mi-main">
+        <div class="q">${m.question}</div>
+        <div class="a">الإجابة الصحيحة: ${m.correctAnswer}</div>
+      </div>
+      <div class="times">${m.count} ${m.count===1?'مرة':'مرات'}</div>
+    </div>
+  `).join('');
+}
+
+/* ============================== أدوات عامة للواجهة ============================== */
+document.getElementById('menu-toggle').addEventListener('click', ()=>{
+  document.getElementById('sidebar').classList.toggle('open');
+});
+function closeMobileSidebar(){
+  if(window.innerWidth<=900) document.getElementById('sidebar').classList.remove('open');
+}
+
+/* ============================== الإقلاع ============================== */
+renderHome();
+</script>
+</body>
+</html>
